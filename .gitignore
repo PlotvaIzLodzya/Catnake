@@ -1,0 +1,18 @@
+/Library/
+/Temp/
+/obj/
+/Logs/
+/UserSettings/
+/Build/
+/*.sln
+/*.csproj
+/*.csproj.user
+/*.slnx
+/.vscode/
+/.vs/
+
+# Baked data
+*_comp_light.exr*
+
+# I have no idea what it is
+/.utmp/
