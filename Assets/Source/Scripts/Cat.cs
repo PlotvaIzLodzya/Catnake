@@ -33,7 +33,7 @@ public class Cat : MonoBehaviour
     private void Update()
     {
         _moveBuffer.Tick(Time.deltaTime);
-        if (_grid.DistToCellCenterNormalized(transform.position) >= 0.9f && _grid.IsOnCellEnter(transform.position, _dir))
+        if (_grid.PathToCellElapsedNormalized(transform.position) >= 0.9f/* && _grid.IsOnCellEnter(transform.position, _dir)*/)
         {
             if (_moveBuffer.IsBuffered)
             {

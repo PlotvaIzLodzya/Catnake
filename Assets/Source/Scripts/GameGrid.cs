@@ -8,6 +8,8 @@ public class GameGrid : MonoBehaviour
     [SerializeField] private Vector2Int _gridSize;
 
     private float _halfCellSize => _cellSize * 0.5f;
+    public float HalfCellSize => _halfCellSize;
+    public float CellSize => _cellSize;
 
     [ContextMenu(nameof(GenerateGrid))]
     private void GenerateGrid()
@@ -30,7 +32,7 @@ public class GameGrid : MonoBehaviour
         return dist;
     }
 
-    public float DistToCellCenterNormalized(Vector3 worldPos)
+    public float PathToCellElapsedNormalized(Vector3 worldPos)
     {
         var dist = DistToCellCenter(worldPos);
         var lerp = 1 - (dist / _halfCellSize);
@@ -48,9 +50,9 @@ public class GameGrid : MonoBehaviour
         return angle < 90f;
     }
 
-    public Vector3 GetCellInDirection(Vector3 pos, Vector3 direction)
+    public Vector3 GetCellInDirection(Vector3 worldPos, Vector3 direction)
     {
-        var gridPos = GetGridPosition(pos);
+        var gridPos = GetGridPosition(worldPos);
         var nextGridPos = direction.normalized * _cellSize;
 
 
