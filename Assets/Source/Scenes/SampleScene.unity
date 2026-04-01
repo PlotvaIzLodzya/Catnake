@@ -5093,7 +5093,6 @@ GameObject:
   m_Component:
   - component: {fileID: 377702133}
   - component: {fileID: 377702132}
-  - component: {fileID: 377702131}
   m_Layer: 0
   m_Name: Line (3)
   m_TagString: Untagged
@@ -5101,20 +5100,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &377702131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377702130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f508d9d853e0e64b8adc39a58d4016f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TransformLineRenderer
-  lineRenderer: {fileID: 377702132}
-  points: []
 --- !u!120 &377702132
 LineRenderer:
   serializedVersion: 3
@@ -5385,7 +5370,6 @@ GameObject:
   m_Component:
   - component: {fileID: 387933787}
   - component: {fileID: 387933786}
-  - component: {fileID: 387933785}
   m_Layer: 0
   m_Name: Line (4)
   m_TagString: Untagged
@@ -5393,20 +5377,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &387933785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387933784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f508d9d853e0e64b8adc39a58d4016f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TransformLineRenderer
-  lineRenderer: {fileID: 387933786}
-  points: []
 --- !u!120 &387933786
 LineRenderer:
   serializedVersion: 3
@@ -5768,6 +5738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TailPoint
   _cat: {fileID: 1939831111}
+  _rb: {fileID: 394592315}
 --- !u!4 &394592314
 Transform:
   m_ObjectHideFlags: 0
@@ -5807,7 +5778,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -16584,7 +16555,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1140122850}
   - component: {fileID: 1140122849}
-  - component: {fileID: 1140122848}
   m_Layer: 0
   m_Name: Line (5)
   m_TagString: Untagged
@@ -16592,20 +16562,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1140122848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1140122847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f508d9d853e0e64b8adc39a58d4016f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TransformLineRenderer
-  lineRenderer: {fileID: 1140122849}
-  points: []
 --- !u!120 &1140122849
 LineRenderer:
   serializedVersion: 3
@@ -17103,7 +17059,7 @@ Transform:
   m_GameObject: {fileID: 1163014161}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -18526,7 +18482,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -27899,7 +27855,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -27932,16 +27888,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9c1ce9f1e2b08548b4b2bfddf15a58a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Cat2
+  m_EditorClassIdentifier: Assembly-CSharp::Cat
   _grid: {fileID: 741683915}
   _speed: 2
-  _end: {fileID: 1874100009}
-  _trail: {fileID: 1535348831}
-  _lineRenderer: {fileID: 387933785}
-  _spline: {fileID: 2082206371}
+  _pathVisual: {fileID: 2082206373}
   _headPoint: {fileID: 157449702}
   _tailPoint: {fileID: 394592313}
-  PathPoints: []
+  _rb: {fileID: 1939831108}
 --- !u!4 &1940455726 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5520694593210768791, guid: 82b0bbd8016d3de45a50a11279525be2, type: 3}
@@ -29215,6 +29168,7 @@ GameObject:
   - component: {fileID: 2082206372}
   - component: {fileID: 2082206371}
   - component: {fileID: 2082206370}
+  - component: {fileID: 2082206373}
   m_Layer: 0
   m_Name: Line (2)
   m_TagString: Untagged
@@ -29290,6 +29244,33 @@ LineRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
+        time: 0.23176253
+        value: 0.49765408
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5929671
+        value: 0.71502143
+        inSlope: 0.26143113
+        outSlope: 0.26143113
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.8288369
+        value: 1
+        inSlope: 0.16898097
+        outSlope: 0.16898097
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1
         value: 1
         inSlope: 0
@@ -29332,7 +29313,7 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 6
     alignment: 0
     textureMode: 2
     textureScale: {x: 1, y: 1}
@@ -29427,6 +29408,20 @@ MonoBehaviour:
       m_Data: []
   m_Knots:
     m_KnotsLink: []
+--- !u!114 &2082206373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082206367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5b1b0adf0cded44a8325ef9fbbdc86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CatSnakePathVisual
+  _spline: {fileID: 2082206371}
+  _splineLine: {fileID: 2082206370}
 --- !u!1001 &2083643762
 PrefabInstance:
   m_ObjectHideFlags: 0

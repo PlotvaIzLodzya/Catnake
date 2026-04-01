@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class TailPoint : CatPoint
 {
-    [SerializeField] private Cat2 _cat;
+    [SerializeField] private Cat _cat;
+    [SerializeField] private Rigidbody2D _rb;
 
     private Coroutine _coroutine;
 
@@ -17,7 +18,6 @@ public class TailPoint : CatPoint
 
     private IEnumerator MoveTo(Vector3 gridPos)
     {
-        var dist = Vector2.Distance(gridPos, transform.position);
         var lerp = 0f;
         var elapsedTime = 0f;
         var startPos = transform.position;
@@ -26,13 +26,13 @@ public class TailPoint : CatPoint
         {
             elapsedTime += Time.deltaTime;
             lerp = elapsedTime / _cat.TimeToCell;
-            var pos = Vector3.Lerp(startPos, gridPos, lerp);
+            var pos = Vector3.LerpUnclamped(startPos, gridPos, lerp);
             var dir = gridPos - transform.position;
             var rot = ToQuaternion(dir);
             transform.rotation = Quaternion.Lerp(startRot, rot, lerp * 10);
             //pos = _grid.GetGridPosition(pos);
-            transform.position = pos;
-            yield return null;
+            _rb.MovePosition(pos);
+            yield return new WaitForFixedUpdate();
         }
     }
 
