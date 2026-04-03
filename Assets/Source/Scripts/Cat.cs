@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,6 @@ public class Cat : CatPoint
         {
             if (_dirs.Count == 0 && _lastDir.sqrMagnitude == 0)
             {
-                Debug.Log("hi");
                 yield return null;
                 continue;
             }
@@ -103,14 +103,15 @@ public class Cat : CatPoint
         var lerp = 0f;
         var elapsedTime = 0f;
         var startPos = transform.position;
-
+        
         while (lerp < 1f)
         {
-            yield return new WaitForFixedUpdate();
             elapsedTime += Time.fixedDeltaTime;
+            elapsedTime = MathF.Round(elapsedTime, 2);
             lerp = elapsedTime / _timeToCell;
-            Debug.Log(lerp);
-            _rb.MovePosition(Vector3.LerpUnclamped(startPos, gridPos, lerp));
+            var pos = Vector3.Lerp(startPos, gridPos, lerp);
+            _rb.MovePosition(pos);
+            yield return new WaitForFixedUpdate();
         }
     }
 
