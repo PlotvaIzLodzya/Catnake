@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+// using UnityEngine.PlayerLoop; // Удалена - не используется
 
 public class Cat : CatPoint
 {
@@ -15,7 +15,7 @@ public class Cat : CatPoint
     private PlayerInput _input;
     private float _timeToCell => _grid.CellSize / _speed;
     private Vector2 _lastDir;
-    public Queue<CatPoint> PathQueue;
+    private Queue<CatPoint> _pathQueue;
     private Queue<Vector2> _dirs;
 
     public float TimeToCell => _timeToCell;
@@ -23,7 +23,7 @@ public class Cat : CatPoint
     private void Awake()
     {
         Application.targetFrameRate = 144;
-        PathQueue = new Queue<CatPoint>();
+        _pathQueue = new Queue<CatPoint>();
         _dirs = new Queue<Vector2>();
         _input = new PlayerInput();
         transform.position = _grid.GetGridPosition(transform.position);
@@ -61,7 +61,8 @@ public class Cat : CatPoint
         {
             if (_dirs.Count == 0 && _lastDir.sqrMagnitude == 0)
             {
-                yield return new WaitForFixedUpdate();
+                Debug.Log("hi");
+                yield return null;
                 continue;
             }
 
@@ -76,10 +77,10 @@ public class Cat : CatPoint
             if (_lastDir.sqrMagnitude > 0f)
             {
                 yield return MoveTo(nextCellPos);
-                if (PathQueue.Count > 5)
+                if (_pathQueue.Count > 5)
                 {
-                    var old = PathQueue.Dequeue();
-                    var gridPos = _grid.GetGridPosition(PathQueue.Peek().transform.position);
+                    var old = _pathQueue.Dequeue();
+                    var gridPos = _grid.GetGridPosition(_pathQueue.Peek().transform.position);
                     _tailPoint.MovingTo(gridPos);
                     old.Destroy();
                 }
@@ -87,12 +88,12 @@ public class Cat : CatPoint
                 var pathGO = new GameObject();
                 var point = pathGO.AddComponent<CatPoint>();
                 pathGO.transform.position = nextCellPos;
-                PathQueue.Enqueue(point);
-                _pathVisual.SetPath(_tailPoint, PathQueue, _headPoint);
+                _pathQueue.Enqueue(point);
+                _pathVisual.SetPath(_tailPoint, _pathQueue, _headPoint);
             }
             else
             {
-                yield return new WaitForFixedUpdate();
+                yield return null;
             }
         }
     }
@@ -102,13 +103,14 @@ public class Cat : CatPoint
         var lerp = 0f;
         var elapsedTime = 0f;
         var startPos = transform.position;
+
         while (lerp < 1f)
         {
-            elapsedTime += Time.deltaTime;
-            lerp = elapsedTime / _timeToCell;
-            var nextPos = Vector3.LerpUnclamped(startPos, gridPos, lerp);
-            _rb.MovePosition(nextPos);
             yield return new WaitForFixedUpdate();
+            elapsedTime += Time.fixedDeltaTime;
+            lerp = elapsedTime / _timeToCell;
+            Debug.Log(lerp);
+            _rb.MovePosition(Vector3.LerpUnclamped(startPos, gridPos, lerp));
         }
     }
 
