@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -34,9 +35,10 @@ public class TailPoint : CatPoint
         {
             elapsedTime += Time.fixedDeltaTime;
             lerp = elapsedTime / _cat.TimeToCell;
-            var t = Mathf.Clamp01(lerp);
-            _rb.MovePosition(Vector3.Lerp(startPos, gridPos, t));
-            transform.rotation = Quaternion.Lerp(startRot, targetRot, t);
+            lerp = MathF.Round(lerp, 2);
+            var pos = Vector3.Lerp(startPos, gridPos, lerp);
+            _rb.MovePosition(pos);
+            transform.rotation = Quaternion.Lerp(startRot, targetRot, lerp);
             yield return new WaitForFixedUpdate();
         }
     }
