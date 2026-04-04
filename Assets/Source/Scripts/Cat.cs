@@ -90,20 +90,23 @@ public class Cat : CatPoint
                 yield return MoveTo(nextCellPos);
                 if (_pathQueue.Count >= _catLength)
                 {
-                    var old = _pathQueue.Dequeue();
+                    while (_pathQueue.Count > _catLength)
+                    {
+                        var old = _pathQueue.Dequeue();
+                        old.Destroy();
+                    }
                     var gridPos = _grid.GetGridPosition(_headPoint.transform.position);
                     if(_pathQueue.Count > 0)
                     {
                         gridPos = _grid.GetGridPosition(_pathQueue.Peek().transform.position);
                     }
                     _tailPoint.MovingTo(gridPos);
-                    old.Destroy();
                 }
 
                 var pathGO = new GameObject();
                 var point = pathGO.AddComponent<CatPoint>();
                 pathGO.transform.position = nextCellPos;
-                _pathQueue.Enqueue(point);
+                _pathQueue.Enqueue(point); 
                 
                 _pathVisual.SetPath(_tailPoint, _pathQueue, _headPoint);
             }
