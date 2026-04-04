@@ -13,6 +13,7 @@ public class Cat : CatPoint
     [SerializeField] private TailPoint _tailPoint;
     [SerializeField] private Rigidbody2D _rb;
 
+    private int _catLength;
     private PlayerInput _input;
     private float _timeToCell => _grid.CellSize / _speed;
     private Vector2 _lastDir;
@@ -23,6 +24,7 @@ public class Cat : CatPoint
 
     private void Awake()
     {
+        _catLength = 1;
         Application.targetFrameRate = 144;
         _pathQueue = new Queue<CatPoint>();
         _dirs = new Queue<Vector2>();
@@ -38,6 +40,15 @@ public class Cat : CatPoint
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _catLength++;
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _catLength--;
+        }
+
         if (!_input.Player.Move.WasPressedThisFrame())
             return;
 
@@ -77,10 +88,14 @@ public class Cat : CatPoint
             if (_lastDir.sqrMagnitude > 0f)
             {
                 yield return MoveTo(nextCellPos);
-                if (_pathQueue.Count > 5)
+                if (_pathQueue.Count >= _catLength)
                 {
                     var old = _pathQueue.Dequeue();
-                    var gridPos = _grid.GetGridPosition(_pathQueue.Peek().transform.position);
+                    var gridPos = _grid.GetGridPosition(_headPoint.transform.position);
+                    if(_pathQueue.Count > 0)
+                    {
+                        gridPos = _grid.GetGridPosition(_pathQueue.Peek().transform.position);
+                    }
                     _tailPoint.MovingTo(gridPos);
                     old.Destroy();
                 }
@@ -89,6 +104,7 @@ public class Cat : CatPoint
                 var point = pathGO.AddComponent<CatPoint>();
                 pathGO.transform.position = nextCellPos;
                 _pathQueue.Enqueue(point);
+                
                 _pathVisual.SetPath(_tailPoint, _pathQueue, _headPoint);
             }
             else
