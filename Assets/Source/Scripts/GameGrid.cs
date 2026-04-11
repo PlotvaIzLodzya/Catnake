@@ -17,6 +17,17 @@ public class GameGrid : MonoBehaviour
         PlaceCells(_cellSize, _gridSize);
     }
 
+    public Vector2 GetRandomGridPos()
+    {
+        var x = Random.Range(-4, 4 + 1);
+        var y = Random.Range(-2, 2 + 1);
+
+        var random = new Vector2(x, y);
+
+        var gridPos = GetGridPosition(random);
+
+        return gridPos;
+    }
 
     public bool IsInCell(Vector3 worldPos)
     {

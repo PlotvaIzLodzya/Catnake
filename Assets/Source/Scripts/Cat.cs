@@ -1,142 +1,173 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// using UnityEngine.PlayerLoop; // Удалена - не используется
 
-public class Cat : CatPoint
+namespace Assets.Source.Scripts.CatLogic
 {
-    [SerializeField] private GameGrid _grid;
-    [SerializeField] private float _speed;
-    [SerializeField] private CatSnakePathVisual _pathVisual;
-    [SerializeField] private CatPoint _headPoint;
-    [SerializeField] private TailPoint _tailPoint;
-    [SerializeField] private Rigidbody2D _rb;
-
-    private int _catLength;
-    private PlayerInput _input;
-    private float _timeToCell => _grid.CellSize / _speed;
-    private Vector2 _lastDir;
-    private Queue<CatPoint> _pathQueue;
-    private Queue<Vector2> _dirs;
-
-    public float TimeToCell => _timeToCell;
-
-    private void Awake()
+    public class Cat : CatPoint, ICat
     {
-        _catLength = 1;
-        Application.targetFrameRate = 144;
-        _pathQueue = new Queue<CatPoint>();
-        _dirs = new Queue<Vector2>();
-        _input = new PlayerInput();
-        transform.position = _grid.GetGridPosition(transform.position);
-        _tailPoint.transform.position = transform.position;
-        StartCoroutine(Moving());
-    }
+        [SerializeField] private GameGrid _grid;
+        [SerializeField] private float _speed;
+        [SerializeField] private CatSnakePathVisual _pathVisual;
+        [SerializeField] private CatPoint _headPoint;
+        [SerializeField] private TailPoint _tailPoint;
+        [SerializeField] private Rigidbody2D _rb;
 
-    private void OnEnable() => _input.Enable();
+        private PlayerInput _input;
+        private Vector2 _lastDir;
+        private List<CatPoint> _pathPoints;
+        private Queue<Vector2> _dirs;
+        private Coroutine _movingCoroutine;
 
-    private void OnDisable() => _input.Disable();
+        public int Length { get; private set; }
+        public CatPath CatPath { get; private set; }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
+        public float TimeToCell => _grid.CellSize / _speed;
+
+        private void Awake()
         {
-            _catLength++;
+            Length = 1;
+            Application.targetFrameRate = 144;
+            _pathPoints = new();
+            _dirs = new Queue<Vector2>();
+            _input = new PlayerInput();
+            transform.position = _grid.GetGridPosition(transform.position);
+            _tailPoint.transform.position = transform.position;
+            _movingCoroutine = StartCoroutine(Moving());
+            CatPath = new(_pathPoints, this);
         }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _catLength--;
-        }
 
-        if (!_input.Player.Move.WasPressedThisFrame())
-            return;
+        private void OnEnable() => _input.Enable();
 
-        var dir = _input.Player.Move.ReadValue<Vector2>();
-        if (_dirs.Count > 2)
-            return;
+        private void OnDisable() => _input.Disable();
 
-        if (_dirs.Count > 0)
+        private void Update()
         {
-            if (Vector2.Angle(_dirs.Peek(), dir) < 95f)
-                _dirs.Enqueue(dir);
-        }
-        else if (Vector2.Angle(transform.up, dir) < 95f)
-        {
-            _dirs.Enqueue(dir);
-        }
-    }
-
-    private IEnumerator Moving()
-    {
-        while (true)
-        {
-            if (_dirs.Count == 0 && _lastDir.sqrMagnitude == 0)
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                yield return null;
-                continue;
+                Length++;
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Length--;
             }
 
-            Vector2 dir = _dirs.Count > 0 ? _dirs.Dequeue() : _lastDir;
-            var nextCellPos = _grid.GetCellInDirection(transform.position, dir);
+            var index = CatPath.GetNextPointIndex(_tailPoint);
+            var body = CatPath.GetPoints(index);
 
-            if (dir.sqrMagnitude > 0f)
-                _lastDir = dir;
-
-            transform.rotation = ToQuaternion(dir);
-
-            if (_lastDir.sqrMagnitude > 0f)
+            var length = 0f;
+            for (int i = 1; i < body.Count; i++)
             {
-                yield return MoveTo(nextCellPos);
-                if (_pathQueue.Count >= _catLength)
+                CatPoint point = body[i];
+                CatPoint point2 = body[i - 1];
+                length += Vector3.Distance(point.transform.position, point2.transform.position);
+            }
+
+            _pathVisual.SetPath(_tailPoint, body, _headPoint);
+
+            if (!_input.Player.Move.WasPressedThisFrame())
+                return;
+
+            var dir = _input.Player.Move.ReadValue<Vector2>();
+
+            if (dir.x != 0 && dir.y != 0)
+                dir = Vector2.zero;
+
+            if (_dirs.Count > 2)
+                return;
+
+            if (_dirs.Count > 0)
+            {
+                if (Vector2.Angle(_dirs.Peek(), dir) < 95f)
+                    _dirs.Enqueue(dir);
+            }
+            else if (Vector2.Angle(transform.up, dir) < 95f)
+            {
+                _dirs.Enqueue(dir);
+            }
+
+        }
+
+        public void Feed(float value)
+        {
+            var length = Mathf.RoundToInt(value);
+            Length += length;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            var length = Mathf.RoundToInt(damage);
+            Length -= length;
+        }
+
+        private IEnumerator Moving()
+        {
+            while (true)
+            {
+                if (_dirs.Count == 0 && _lastDir.sqrMagnitude == 0)
                 {
-                    while (_pathQueue.Count > _catLength)
-                    {
-                        var old = _pathQueue.Dequeue();
-                        old.Destroy();
-                    }
-                    var gridPos = _grid.GetGridPosition(_headPoint.transform.position);
-                    if(_pathQueue.Count > 0)
-                    {
-                        gridPos = _grid.GetGridPosition(_pathQueue.Peek().transform.position);
-                    }
-                    _tailPoint.MovingTo(gridPos);
+                    yield return null;
+                    continue;
                 }
 
-                var pathGO = new GameObject();
-                var point = pathGO.AddComponent<CatPoint>();
-                pathGO.transform.position = nextCellPos;
-                _pathQueue.Enqueue(point); 
-                
-                _pathVisual.SetPath(_tailPoint, _pathQueue, _headPoint);
-            }
-            else
-            {
-                yield return null;
+                Vector2 dir = _dirs.Count > 0 ? _dirs.Dequeue() : _lastDir;
+                var nextCellPos = _grid.GetCellInDirection(transform.position, dir);
+
+                if (dir.sqrMagnitude > 0f)
+                    _lastDir = dir;
+
+                transform.rotation = ToQuaternion(dir);
+
+                if (_lastDir.sqrMagnitude > 0f)
+                {
+                    yield return MoveTo(nextCellPos);
+                    var pathGO = new GameObject();
+                    var point = pathGO.AddComponent<CatPoint>();
+                    _pathPoints.Add(point);
+                    if (_pathPoints.Count > Length + 5)
+                    {
+                        var catPoint = _pathPoints[0];
+                        catPoint.Destroy();
+                        _pathPoints.RemoveAt(0);
+                    }
+                    for (int i = 0; i < _pathPoints.Count; i++)
+                    {
+                        CatPoint p = _pathPoints[i];
+                        p.name = $"Point: {i}";
+                    }
+                    pathGO.transform.position = nextCellPos;
+
+                }
+                else
+                {
+                    yield return null;
+                }
             }
         }
-    }
 
-    private IEnumerator MoveTo(Vector3 gridPos)
-    {
-        var lerp = 0f;
-        var elapsedTime = 0f;
-        var startPos = transform.position;
-        
-        while (lerp < 1f)
+        private IEnumerator MoveTo(Vector3 gridPos)
         {
-            elapsedTime += Time.fixedDeltaTime;
-            elapsedTime = MathF.Round(elapsedTime, 2);
-            lerp = elapsedTime / _timeToCell;
-            var pos = Vector3.Lerp(startPos, gridPos, lerp);
-            _rb.MovePosition(pos);
-            yield return new WaitForFixedUpdate();
-        }
-    }
+            var lerp = 0f;
+            var elapsedTime = 0f;
+            var startPos = transform.position;
+            while (lerp < 1f)
+            {
+                elapsedTime += Time.fixedDeltaTime;
+                elapsedTime = MathF.Round(elapsedTime, 2);
+                lerp = elapsedTime / TimeToCell;
+                var pos = Vector3.Lerp(startPos, gridPos, lerp);
 
-    private static Quaternion ToQuaternion(Vector2 dir)
-    {
-        float angleDir = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        return Quaternion.Euler(0, 0, angleDir - 90f);
+
+                _rb.MovePosition(pos);
+                yield return new WaitForFixedUpdate();
+            }
+        }
+
+        private static Quaternion ToQuaternion(Vector2 dir)
+        {
+            float angleDir = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            return Quaternion.Euler(0, 0, angleDir - 90f);
+        }
     }
 }
