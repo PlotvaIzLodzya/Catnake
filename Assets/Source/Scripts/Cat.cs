@@ -56,14 +56,6 @@ namespace Assets.Source.Scripts.CatLogic
             var index = CatPath.GetNextPointIndex(_tailPoint);
             var body = CatPath.GetPoints(index);
 
-            var length = 0f;
-            for (int i = 1; i < body.Count; i++)
-            {
-                CatPoint point = body[i];
-                CatPoint point2 = body[i - 1];
-                length += Vector3.Distance(point.transform.position, point2.transform.position);
-            }
-
             _pathVisual.SetPath(_tailPoint, body, _headPoint);
 
             if (!_input.Player.Move.WasPressedThisFrame())
