@@ -57,6 +57,16 @@ namespace Assets.Source.Scripts.CatLogic
             var index = CatPath.GetNextPointIndex(_tailPoint);
             var body = CatPath.GetPoints(index);
 
+            foreach (var catPathPoint in _pathPoints)
+            {
+                _grid.FreeCell(catPathPoint.transform.position);
+            }
+
+            foreach (var point in body)
+            {
+                _grid.Ocupy(point.transform.position);
+            }
+
             _pathVisual.SetPath(_tailPoint, body, _headPoint);
 
             if (!_input.Player.Move.WasPressedThisFrame())

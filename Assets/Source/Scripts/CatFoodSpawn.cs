@@ -23,6 +23,22 @@ namespace Assets.Source.Scripts.CatLogic
         private void Update()
         {
             _spawnedCatFood.RemoveAll(c => c == null);
+            foreach (var catFood in _spawnedCatFood)
+            {
+                if (catFood.IsEaten)
+                {
+                    _grid.FreeCell(catFood.transform.position);
+                }
+            }
+
+            foreach (var catFood in _spawnedCatFood)
+            {
+                if (catFood.IsEaten)
+                {
+                    catFood.Destroy();
+                }
+            }
+
         }
 
         private IEnumerator Spawning()
@@ -34,7 +50,8 @@ namespace Assets.Source.Scripts.CatLogic
                 var delay = UnityEngine.Random.Range(1.5f, 3f);
                 yield return new WaitForSeconds(delay);
 
-                var pos = _grid.GetRandomGridPos();
+                var pos = _grid.GetRandomFreeGridPos();
+                _grid.Ocupy(pos);
                 var catFood = Instantiate(_catFoodPrefab, pos, Quaternion.identity);
                 _spawnedCatFood.Add(catFood);
             }

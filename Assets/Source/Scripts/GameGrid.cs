@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,30 +8,62 @@ namespace Assets.Source.Scripts.LevelFeatures
     public class GameGrid : MonoBehaviour
     {
         [SerializeField] private float _cellSize;
-        [SerializeField] private GameObject _cellPrefab;
-        [SerializeField] private Vector2Int _gridSize;
+        [SerializeField] private Transform _leftDown;
+        [SerializeField] private Transform _rightTop;
+
+        private List<Vector2> _allCells;
+        private HashSet<Vector2> _occupiedCells;
 
         private float _halfCellSize => _cellSize * 0.5f;
         public float HalfCellSize => _halfCellSize;
         public float CellSize => _cellSize;
 
-        [ContextMenu(nameof(GenerateGrid))]
-        private void GenerateGrid()
+        private void Awake()
         {
-            PlaceCells(_cellSize, _gridSize);
+            _allCells = new();
+            _occupiedCells = new();
+            var gridLeftDown = GetGridPosition(_leftDown.position);
+            var gridRightTop = GetGridPosition(_rightTop.position);
+            for (float x = gridLeftDown.x; x < gridRightTop.x; x+= _cellSize)
+            {
+                for (float y = gridLeftDown.y; y < gridRightTop.y; y+= _cellSize)
+                {
+                    _allCells.Add(new Vector2(x, y));
+                }
+            }
         }
 
         public Vector2 GetRandomGridPos()
         {
-            var x = Random.Range(-4, 4 + 1);
-            var y = Random.Range(-2, 2 + 1);
-
-            var random = new Vector2(x, y);
-
-            var gridPos = GetGridPosition(random);
+            var randomIndex = Random.Range(0, _allCells.Count);
+            var randomCell = _allCells[randomIndex];
+            
+            var gridPos = GetGridPosition(randomCell);
 
             return gridPos;
         }
+
+        public Vector2 GetRandomFreeGridPos()
+        {
+            var freeCels = _allCells.Except(_occupiedCells).ToList();
+            var randomIndex = Random.Range(0, freeCels.Count);
+            var randomCell = freeCels[randomIndex];
+
+            return randomCell;
+        }
+
+        public void Ocupy(Vector2 worldPos)
+        {
+            var gridPos = GetGridPosition(worldPos);
+            _occupiedCells.Add(gridPos);
+        }
+
+        public void FreeCell(Vector2 worldPos)
+        {
+            var gridPos = GetGridPosition(worldPos);
+            _occupiedCells.Remove(gridPos);
+        }
+
 
         public bool IsInCell(Vector3 worldPos)
         {
@@ -89,55 +123,6 @@ namespace Assets.Source.Scripts.LevelFeatures
             float centerY = (cellY + 0.5f) * _cellSize;
 
             return new Vector3(centerX, centerY, worldPosition.z);
-        }
-
-        /// <summary>
-        /// Создаёт и выкладывает клетки в виде сетки.
-        /// </param>
-        /// <param name="cellSize">Размер одной клетки в мировых единицах (ширина, высота)</param>
-        /// <param name="gridSize">Количество клеток по горизонтали и вертикали</param>
-        public void PlaceCells(float cellSize, Vector2 gridSize)
-        {
-            if (_cellPrefab == null)
-            {
-                Debug.LogError("Cell prefab is not assigned!");
-                return;
-            }
-
-            // Очищаем предыдущие клетки (если нужно перестроить сетку)
-            foreach (Transform child in transform)
-            {
-                DestroyImmediate(child.gameObject);
-            }
-
-            // Рассчитываем смещение, чтобы сетка была центрирована относительно родительского объекта
-            float totalWidth = cellSize * gridSize.x;
-            float totalHeight = cellSize * gridSize.y;
-            Vector2 startPosition = new Vector2(
-                -totalWidth / 2f + cellSize / 2f,
-                -totalHeight / 2f + cellSize / 2f
-            );
-
-            // Проходим по всем ячейкам сетки
-            for (int y = 0; y < gridSize.y; y++)
-            {
-                for (int x = 0; x < gridSize.x; x++)
-                {
-                    // Позиция текущей клетки
-                    Vector2 cellPosition = startPosition + new Vector2(x * cellSize, y * cellSize);
-
-                    // Создаём экземпляр префаба
-                    GameObject cell = PrefabUtility.InstantiatePrefab(_cellPrefab, transform) as GameObject;
-                    cell.transform.localPosition = cellPosition;
-
-                    // Масштабируем клетку, если префаб имеет размер 1x1, чтобы он соответствовал cellSize
-                    // (если префаб уже имеет нужный размер, эту строку можно убрать)
-                    cell.transform.localScale = new Vector3(cellSize, cellSize, 1f);
-
-                    // Дополнительно можно задать имя для удобства
-                    cell.name = $"Cell_{x}_{y}";
-                }
-            }
         }
     }
 }
