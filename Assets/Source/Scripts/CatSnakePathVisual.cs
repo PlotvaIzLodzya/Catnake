@@ -21,7 +21,7 @@ namespace Assets.Source.Scripts.CatLogic
             foreach (var p in body)
                 _orderedPoints.Add(p);
             _orderedPoints.Add(head);
-
+            _splineLine.resolution = _orderedPoints.Count * 10;
             _spline.SetControlPointsFromCatPoints(_orderedPoints);
             _splineLine.UpdateSpline();
         }
