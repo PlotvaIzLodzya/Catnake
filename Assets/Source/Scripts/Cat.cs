@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Source.Scripts.CatLogic
@@ -25,6 +26,7 @@ namespace Assets.Source.Scripts.CatLogic
         public CatPath CatPath { get; private set; }
 
         public float TimeToCell => _grid.CellSize / _speed;
+        private bool _damageTaken;
 
         private void Awake()
         {
@@ -89,18 +91,20 @@ namespace Assets.Source.Scripts.CatLogic
             {
                 _dirs.Enqueue(dir);
             }
-
         }
 
         public void Feed(float value)
         {
             var length = Mathf.RoundToInt(value);
+
             Length += length;
         }
 
         public void TakeDamage(float damage)
         {
             var length = Mathf.RoundToInt(damage);
+            _damageTaken = true;
+            StartCoroutine(OnDamaged());
             Length -= length;
         }
 
@@ -124,7 +128,8 @@ namespace Assets.Source.Scripts.CatLogic
 
                 if (_lastDir.sqrMagnitude > 0f)
                 {
-                    yield return MoveTo(nextCellPos);
+                    
+                    yield return MoveTo(nextCellPos, TimeToCell);
                     var pathGO = new GameObject();
                     var point = pathGO.AddComponent<CatPoint>();
                     _pathPoints.Add(point);
@@ -149,7 +154,7 @@ namespace Assets.Source.Scripts.CatLogic
             }
         }
 
-        private IEnumerator MoveTo(Vector3 gridPos)
+        private IEnumerator MoveTo(Vector3 gridPos, float time, bool eased = false)
         {
             var lerp = 0f;
             var elapsedTime = 0f;
@@ -158,7 +163,9 @@ namespace Assets.Source.Scripts.CatLogic
             {
                 elapsedTime += Time.fixedDeltaTime;
                 elapsedTime = MathF.Round(elapsedTime, 2);
-                lerp = elapsedTime / TimeToCell;
+                lerp = elapsedTime / time;
+                if (eased)
+                    lerp = EaseOutBack(lerp);
                 var pos = Vector3.Lerp(startPos, gridPos, lerp);
 
 
@@ -167,10 +174,29 @@ namespace Assets.Source.Scripts.CatLogic
             }
         }
 
+        private IEnumerator OnDamaged()
+        {
+            var previousPos = CatPath.GetPointAt(0).transform.position;
+            StopCoroutine(_movingCoroutine);
+            yield return MoveTo(previousPos, 0.3f, true);
+            _damageTaken = false;
+
+            yield return new WaitForSeconds(0.2f);
+            _movingCoroutine = StartCoroutine(Moving());
+        }
+
         private static Quaternion ToQuaternion(Vector2 dir)
         {
             float angleDir = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             return Quaternion.Euler(0, 0, angleDir - 90f);
         }
-    }
+
+        float EaseOutBack(float lerp)
+        {
+            var c1 = 1.70158f;
+            var c3 = c1 + 1f;
+
+            return 1f + c3* Mathf.Pow(lerp - 1f, 3f) + c1* Mathf.Pow(lerp - 1f, 2f);
+        }
+}
 }

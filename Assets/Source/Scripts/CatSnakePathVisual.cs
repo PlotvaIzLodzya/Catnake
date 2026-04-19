@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Assets.Source.Scripts.CatLogic
 {
-
     /// <summary>
     /// Порядок точек: хвост → сегменты тела → голова. Обновляет сплайн; <see cref="SplineLineRenderer"/> на том же объекте с <see cref="SplineContainer"/> строит LineRenderer по сплайну.
     /// </summary>

@@ -15,10 +15,17 @@ namespace Assets.Source.Scripts.CatLogic
             _cat = cat;
         }
 
+        public void RemoveAt(int index)
+        {
+            var i = _pathPoints.Count - index;
+            i = Mathf.Clamp(i, 0, _pathPoints.Count - 1);
+            _pathPoints.RemoveAt(i);
+        }
+
         public CatPoint GetPointAt(int targetLength)
         {
             targetLength = _pathPoints.Count - targetLength;
-            targetLength = (int)Mathf.Clamp(targetLength, 0f, _pathPoints.Count);
+            targetLength = (int)Mathf.Clamp(targetLength, 0f, _pathPoints.Count - 1);
 
             if (_pathPoints.Count > targetLength)
             {
