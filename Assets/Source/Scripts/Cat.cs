@@ -132,7 +132,21 @@ namespace Assets.Source.Scripts.CatLogic
                     yield return MoveTo(nextCellPos, TimeToCell);
                     var pathGO = new GameObject();
                     var point = pathGO.AddComponent<CatPoint>();
+                    if(_pathPoints.Count > 1)
+                    {
+                        var pointBehindHead = CatPath.GetPointAt(0);
+                        var col = pointBehindHead.AddComponent<BoxCollider2D>();
+                        col.isTrigger = true;
+                        col.size = Vector2.one * 0.3f;
+
+                        for (int i = _pathPoints.Count - 1; i > Length; i--)
+                        {
+                            var p = CatPath.GetPointAt(i);
+                            p.DisableCollision();
+                        }
+                    }    
                     _pathPoints.Add(point);
+        
                     if (_pathPoints.Count > Length + 5)
                     {
                         var catPoint = _pathPoints[0];
@@ -179,6 +193,15 @@ namespace Assets.Source.Scripts.CatLogic
             var previousPos = CatPath.GetPointAt(0).transform.position;
             StopCoroutine(_movingCoroutine);
             yield return MoveTo(previousPos, 0.3f, true);
+            if(_pathPoints.Count > 1)
+            {
+                for (int i = _pathPoints.Count - 1; i > Length; i--)
+                {
+                    var p = CatPath.GetPointAt(i);
+                    p.DisableCollision();
+                }
+
+            }
             _damageTaken = false;
 
             yield return new WaitForSeconds(0.2f);
