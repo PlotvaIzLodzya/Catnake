@@ -26,7 +26,6 @@ namespace Assets.Source.Scripts.CatLogic
         public CatPath CatPath { get; private set; }
 
         public float TimeToCell => _grid.CellSize / _speed;
-        private bool _damageTaken;
 
         private void Awake()
         {
@@ -103,7 +102,6 @@ namespace Assets.Source.Scripts.CatLogic
         public void TakeDamage(float damage)
         {
             var length = Mathf.RoundToInt(damage);
-            _damageTaken = true;
             StartCoroutine(OnDamaged());
             Length -= length;
         }
@@ -202,7 +200,6 @@ namespace Assets.Source.Scripts.CatLogic
                 }
 
             }
-            _damageTaken = false;
 
             yield return new WaitForSeconds(0.2f);
             _movingCoroutine = StartCoroutine(Moving());

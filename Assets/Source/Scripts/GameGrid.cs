@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Source.Scripts.LevelFeatures
@@ -11,8 +11,10 @@ namespace Assets.Source.Scripts.LevelFeatures
         [SerializeField] private Transform _leftDown;
         [SerializeField] private Transform _rightTop;
 
+        private bool _needToUpdateFreeCells;
         private List<Vector2> _allCells;
         private HashSet<Vector2> _occupiedCells;
+        private List<Vector2> _freeCells;
 
         private float _halfCellSize => _cellSize * 0.5f;
         public float HalfCellSize => _halfCellSize;
@@ -22,6 +24,7 @@ namespace Assets.Source.Scripts.LevelFeatures
         {
             _allCells = new();
             _occupiedCells = new();
+            _freeCells = new();
             var gridLeftDown = GetGridPosition(_leftDown.position);
             var gridRightTop = GetGridPosition(_rightTop.position);
             for (float x = gridLeftDown.x; x < gridRightTop.x; x+= _cellSize)
@@ -45,9 +48,14 @@ namespace Assets.Source.Scripts.LevelFeatures
 
         public Vector2 GetRandomFreeGridPos()
         {
-            var freeCels = _allCells.Except(_occupiedCells).ToList();
-            var randomIndex = Random.Range(0, freeCels.Count);
-            var randomCell = freeCels[randomIndex];
+            if (_needToUpdateFreeCells)
+            {
+                _freeCells = _allCells.Except(_occupiedCells).ToList();
+                _needToUpdateFreeCells = false;
+            }
+
+            var randomIndex = Random.Range(0, _freeCells.Count);
+            var randomCell = _freeCells[randomIndex];
 
             return randomCell;
         }
@@ -55,12 +63,20 @@ namespace Assets.Source.Scripts.LevelFeatures
         public void Ocupy(Vector2 worldPos)
         {
             var gridPos = GetGridPosition(worldPos);
+            _needToUpdateFreeCells = true;
             _occupiedCells.Add(gridPos);
+        }
+
+        public void Ocupy(Vector2[] worldPositions)
+        {
+            _occupiedCells.AddRange(worldPositions);
+            _needToUpdateFreeCells = true;
         }
 
         public void FreeCell(Vector2 worldPos)
         {
             var gridPos = GetGridPosition(worldPos);
+            _needToUpdateFreeCells = true;
             _occupiedCells.Remove(gridPos);
         }
 

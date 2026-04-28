@@ -65,7 +65,6 @@ namespace Assets.Source.Scripts.CatLogic
                     var dir = next.transform.position - transform.position;
                     transform.rotation = ToQuaternion(dir.normalized);
                     yield return MoveTo(next.transform.position);
-
                 }
             }
         }
