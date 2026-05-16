@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a39363adaf49d60428dd9724c6a9a11e, type: 3}
+  m_Name: OrangeCatPack
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Source.Scripts.CatLogic.CatVisualPack
+  Head: {fileID: -8519140906428133537, guid: 062cdcc89647a3a4d94e24655a9777f7, type: 3}
+  Body: {fileID: 0}
+  Tail: {fileID: -295027057, guid: 062cdcc89647a3a4d94e24655a9777f7, type: 3}
+  TopPaw: {fileID: 1840836140, guid: 062cdcc89647a3a4d94e24655a9777f7, type: 3}
+  BotPaw: {fileID: -884060880, guid: 062cdcc89647a3a4d94e24655a9777f7, type: 3}

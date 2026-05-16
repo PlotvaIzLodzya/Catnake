@@ -1,13 +1,31 @@
 fileFormatVersion: 2
-guid: 062cdcc89647a3a4d94e24655a9777f7
+guid: d5df3b1c16283d544a1526a295f77272
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8519140906428133537
-    second: IMG_0090_0
+      213: 2236364905745426614
+    second: Siam_0
   - first:
-      213: 9048986643000041555
-    second: IMG_0090_1
+      213: 3221621985002869499
+    second: Siam_1
+  - first:
+      213: -3629532863876213064
+    second: Siam_2
+  - first:
+      213: 6000352048243276972
+    second: Siam_3
+  - first:
+      213: 5840701231446416395
+    second: Siam_4
+  - first:
+      213: -6724739853858368338
+    second: Siam_5
+  - first:
+      213: 1250022535041845983
+    second: Siam_6
+  - first:
+      213: 8511695333853083291
+    second: Siam_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -142,11 +160,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_0090_0
+      name: Siam_0
       rect:
         serializedVersion: 2
-        x: 32
-        y: 578
+        x: 33
+        y: 579
         width: 464
         height: 404
       alignment: 9
@@ -157,140 +175,162 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f5f0ad06b7ee5c980800000000000000
-      internalID: -8519140906428133537
+      spriteID: 6b82b13780a290f10800000000000000
+      internalID: 2236364905745426614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_1
+      name: Siam_1
       rect:
         serializedVersion: 2
         x: 600
-        y: 493
-        width: 320
-        height: 261
-      alignment: 9
-      pivot: {x: 0.1, y: 0.5}
+        y: 536
+        width: 219
+        height: 265
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 350a5418865749d70800000000000000
-      internalID: 9048986643000041555
+      spriteID: bf25fa0602085bc20800000000000000
+      internalID: 3221621985002869499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_2
+      name: Siam_2
       rect:
         serializedVersion: 2
-        x: 50
-        y: 289
-        width: 132
-        height: 173
+        x: 867
+        y: 537
+        width: 114
+        height: 261
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b65d04271f41adc0800000000000000
+      internalID: -3629532863876213064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Siam_3
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 288
+        width: 127
+        height: 172
       alignment: 9
       pivot: {x: 0.68, y: 0.09}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4f8ab2da189df3b4a82cbce7315c729f
-      internalID: 1982925884
+      spriteID: cacf3da8568854350800000000000000
+      internalID: 6000352048243276972
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_3
+      name: Siam_4
       rect:
         serializedVersion: 2
-        x: 239
-        y: 287
-        width: 131
-        height: 173
+        x: 242
+        y: 288
+        width: 127
+        height: 172
       alignment: 9
       pivot: {x: 0.38, y: 0.09}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 24364a33da5f845459ae19298a8c2146
-      internalID: -415373650
+      spriteID: b0cdc8b13d65e0150800000000000000
+      internalID: 5840701231446416395
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_4
+      name: Siam_5
       rect:
         serializedVersion: 2
-        x: 431
+        x: 435
         y: 224
-        width: 151
-        height: 241
+        width: 147
+        height: 236
       alignment: 9
       pivot: {x: 0.62, y: 0.09}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c702c769e58942a45a908beafa20a76d
-      internalID: 1840836140
+      spriteID: ea41cdb6bbceca2a0800000000000000
+      internalID: -6724739853858368338
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_5
+      name: Siam_6
       rect:
         serializedVersion: 2
-        x: 653
-        y: 223
-        width: 148
-        height: 238
+        x: 654
+        y: 222
+        width: 147
+        height: 236
       alignment: 9
       pivot: {x: 0.38, y: 0.09}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 792345534e0b6f54ebd230fa9201af6d
-      internalID: -884060880
+      spriteID: fda076a6fd8f85110800000000000000
+      internalID: 1250022535041845983
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0090_6
+      name: Siam_7
       rect:
         serializedVersion: 2
-        x: 828
-        y: 144
-        width: 151
-        height: 315
+        x: 827
+        y: 143
+        width: 153
+        height: 317
       alignment: 9
-      pivot: {x: 0.27314162, y: 0.057239495}
+      pivot: {x: 0.27, y: 0.05}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 92a98dd9a473f7543ac1f0edf32f6a9a
-      internalID: -295027057
+      spriteID: b96b9aa2fcd9f1670800000000000000
+      internalID: 8511695333853083291
       vertices: []
       indices: 
       edges: []
@@ -299,7 +339,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 101d8bc0a4a35554dbc6b2c58d02613e
+    spriteID: 51c716502e01ead479747eceb203ed3d
     internalID: 0
     vertices: []
     indices: 
@@ -307,17 +347,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":2,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      IMG_0090_0: -8519140906428133537
-      IMG_0090_1: 9048986643000041555
-      IMG_0090_2: 1982925884
-      IMG_0090_3: -415373650
-      IMG_0090_4: 1840836140
-      IMG_0090_5: -884060880
-      IMG_0090_6: -295027057
+      Siam_0: 2236364905745426614
+      Siam_1: 3221621985002869499
+      Siam_2: -3629532863876213064
+      Siam_3: 6000352048243276972
+      Siam_4: 5840701231446416395
+      Siam_5: -6724739853858368338
+      Siam_6: 1250022535041845983
+      Siam_7: 8511695333853083291
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

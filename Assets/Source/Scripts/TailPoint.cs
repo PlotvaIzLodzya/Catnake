@@ -8,14 +8,11 @@ namespace Assets.Source.Scripts.CatLogic
     {
         [SerializeField] private Cat _cat;
         [SerializeField] private Rigidbody2D _rb;
-        [SerializeField] private CatSnakePathVisual _pathVisual;
 
-        private Coroutine _coroutine;
-        private Vector3 _pendingTarget;
-        public float SpeedMultiplier;
         private bool _catchUp;
         private Coroutine _movingCoroutine;
-        private int _index;
+
+        public float SpeedMultiplier { get; private set; }
 
         private void Start()
         {
